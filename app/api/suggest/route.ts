@@ -1,7 +1,7 @@
 import OpenAI from "openai";
 
-export const runtime = "nodejs";
-export const maxDuration = 30;
+export const runtime = "edge";
+export const maxDuration = 25;
 
 const SYSTEM_PROMPT = `You are a PowerShell scripting expert helping users accomplish tasks.
 
@@ -56,7 +56,7 @@ export async function POST(req: Request) {
       const encoder = new TextEncoder();
       try {
         const completion = await client.chat.completions.create({
-          model: "meta/llama-3.3-70b-instruct",
+          model: "meta/llama-3.1-8b-instruct",
           max_tokens: 1500,
           stream: true,
           messages: [
