@@ -1,4 +1,4 @@
-import Anthropic from "@anthropic-ai/sdk";
+import OpenAI from "openai";
 
 export const runtime = "nodejs";
 export const maxDuration = 30;
@@ -17,12 +17,12 @@ Rules:
 - Be concise. Do not pad the response.`;
 
 export async function POST(req: Request) {
-  const apiKey = process.env.ANTHROPIC_API_KEY;
+  const apiKey = process.env.NVIDIA_API_KEY;
   if (!apiKey) {
     return new Response(
       JSON.stringify({
         error:
-          "ANTHROPIC_API_KEY is not set. Add it to .env.local (local) or your Vercel project settings (deployed).",
+          "NVIDIA_API_KEY is not set. Add it to .env.local (local) or your Vercel project settings (deployed).",
       }),
       { status: 500, headers: { "Content-Type": "application/json" } }
     );
@@ -46,28 +46,33 @@ export async function POST(req: Request) {
     });
   }
 
-  const anthropic = new Anthropic({ apiKey });
+  const client = new OpenAI({
+    apiKey,
+    baseURL: "https://integrate.api.nvidia.com/v1",
+  });
 
   const stream = new ReadableStream<Uint8Array>({
     async start(controller) {
       const encoder = new TextEncoder();
       try {
-        const messageStream = anthropic.messages.stream({
-          model: "claude-sonnet-5",
+        const completion = await client.chat.completions.create({
+          model: "meta/llama-3.3-70b-instruct",
           max_tokens: 1500,
-          system: SYSTEM_PROMPT,
-          messages: [{ role: "user", content: goal }],
+          stream: true,
+          messages: [
+            { role: "system", content: SYSTEM_PROMPT },
+            { role: "user", content: goal },
+          ],
         });
 
-        messageStream.on("text", (text) => {
-          controller.enqueue(encoder.encode(text));
-        });
-
-        await messageStream.finalMessage();
+        for await (const chunk of completion) {
+          const text = chunk.choices[0]?.delta?.content ?? "";
+          if (text) controller.enqueue(encoder.encode(text));
+        }
         controller.close();
       } catch (err) {
         const message = err instanceof Error ? err.message : "Unknown error";
-        controller.enqueue(encoder.encode(`\n\n[Error contacting Claude: ${message}]`));
+        controller.enqueue(encoder.encode(`\n\n[Error contacting NVIDIA API: ${message}]`));
         controller.close();
       }
     },

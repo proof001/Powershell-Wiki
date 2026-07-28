@@ -9,9 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.32.1",
     "fuse.js": "^7.0.0",
     "next": "^16.2.12",
+    "openai": "^6.49.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "shiki": "^1.29.2"

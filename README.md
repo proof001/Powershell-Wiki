@@ -17,13 +17,13 @@ Next.js 15 (App Router) · TypeScript · Tailwind CSS v4 · Shiki · Fuse.js · 
 
 ```bash
 npm install
-cp .env.example .env.local   # add your ANTHROPIC_API_KEY
+cp .env.example .env.local   # add your NVIDIA_API_KEY
 npm run dev
 ```
 
 Open http://localhost:3000.
 
-> The cheat sheets and search work with no API key. The **Goal Explorer's AI suggestion** requires `ANTHROPIC_API_KEY`.
+> The cheat sheets and search work with no API key. The **Goal Explorer's AI suggestion** requires `NVIDIA_API_KEY` (free tier at [build.nvidia.com](https://build.nvidia.com)).
 
 ## Adding a cheat sheet
 
