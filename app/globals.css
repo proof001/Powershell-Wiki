@@ -1,0 +1,43 @@
+@import "tailwindcss";
+
+:root {
+  --background: #0b0e14;
+  --surface: #141922;
+  --surface-2: #1b2230;
+  --border: #262f3f;
+  --text: #e6edf3;
+  --text-muted: #8b98a9;
+  --accent: #3fb6ff;
+  --accent-2: #7c5cff;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--text);
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Shiki output: strip its background, let our card provide it */
+.code-shiki pre {
+  margin: 0;
+  padding: 1rem;
+  background: transparent !important;
+  overflow-x: auto;
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+.code-shiki code {
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+    "Liberation Mono", monospace;
+}
+
+::selection {
+  background: rgba(63, 182, 255, 0.3);
+}
